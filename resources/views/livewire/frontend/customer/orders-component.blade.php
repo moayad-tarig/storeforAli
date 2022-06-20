@@ -19,7 +19,7 @@
                     {{-- {{ dd($orders) }} --}}
                     @foreach ($orders as  $item)
                         
-                        {{ dd($item) }}
+                   
                     @endforeach
                 @forelse($orders as  $order)
                     <tr wire:key="{{ $order->id }}">
@@ -56,36 +56,53 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($order->products as $product)
+                    @forelse ($products as $item)
+                        @foreach ($item->products as $product)
                         <tr>
-                            <td>{{ $product->name }}</td>
-                            <td>{{ $order->currency() . ' ' . number_format($product->price, 2) }}</td>
-                            <td>{{ $product->pivot->quantity }}</td>
-                            <td>{{ $order->currency() . ' ' . number_format($product->price * $product->pivot->quantity, 2) }}</td>
+                          
+                          <td>{{ $product->name }}</td>
+                          <td>{{ $item->currency(). ' ' . number_format($product->price, 2)}}</td>
+                          <td>{{ $product->pivot->quantity }}</td>
+                          <td>{{ $item->currency() . ' ' . number_format($product->price * $product->pivot->quantity, 2) }}</td>
+
+
                         </tr>
-                    @endforeach
-                    <tr>
-                        <td colspan="3" class="text-right"><strong>Subtotal</strong></td>
-                        <td>{{ $order->currency() . ' ' . number_format($order->subtotal, 2) }}</td>
-                    </tr>
-                    @if(!is_null($order->discount_code))
-                    <tr>
-                        <td colspan="3" class="text-right"><strong>Discount (<small>{{ $order->discount_code }}</small>)</strong></td>
-                        <td>{{ $order->currency() . ' ' . number_format($order->discount, 2) }}</td>
-                    </tr>
-                    @endif
-                    <tr>
-                        <td colspan="3" class="text-right"><strong>Tax</strong></td>
-                        <td>{{ $order->currency() . ' ' . number_format($order->tax, 2) }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" class="text-right"><strong>Shipping</strong></td>
-                        <td>{{ $order->currency() . ' ' . number_format($order->shipping, 2) }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" class="text-right"><strong>Amount</strong></td>
-                        <td>{{ $order->currency() . ' ' . number_format($order->total, 2) }}</td>
-                    </tr>
+
+                
+                          @endforeach
+                          <tr>
+                              <td colspan="3" class="text-right"><strong>Subtotal</strong></td>
+                              <td>{{ $item->currency() . ' ' . number_format($item->subtotal, 2) }}</td>
+                            </tr>
+                            @if(!is_null($item->discount_code))
+                            <tr>
+                                <td colspan="3" class="text-right"><strong>Discount (<small>{{ $item->discount_code }}</small>)</strong></td>
+                                <td>{{ $item->currency() . ' ' . number_format($item->discount, 2) }}</td>
+                            </tr>
+  
+                            @endif
+                            <tr>
+                              <td colspan="3" class="text-right"><strong>Tax</strong></td>
+                              <td>{{ $item->currency() . ' ' . number_format($item->tax, 2) }}</td>
+                          </tr>
+                          <tr>
+                              <td colspan="3" class="text-right"><strong>Shipping</strong></td>
+                              <td>{{ $item->currency() . ' ' . number_format($item->shipping, 2) }}</td>
+                          </tr>
+                          <tr>
+                              <td colspan="3" class="text-right"><strong>Amount</strong></td>
+                              <td>{{ $item->currency() . ' ' . number_format($item->total, 2) }}</td>
+                          </tr>
+                          
+                        @empty
+                        <tr>
+                            <td colspan="5">
+                                <p class="text-center">{{ __('No orders found.') }}</p>
+                            </td>
+                        </tr>      
+                        @endforelse
+                      
+         
                     </tbody>
                 </table>
             </div>
